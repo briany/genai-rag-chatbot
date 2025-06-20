@@ -1,0 +1,52 @@
+{
+  "d66e3d8d-a374-49cf-93f8-b996e633fcc8": {
+    "filename": "test_document.txt",
+    "chunk_count": 2,
+    "doc_id": "d66e3d8d-a374-49cf-93f8-b996e633fcc8"
+  },
+  "7b277776-6353-4e46-b4dd-4fe8a5b6cf06": {
+    "filename": "simple_test.txt",
+    "chunk_count": 1,
+    "doc_id": "7b277776-6353-4e46-b4dd-4fe8a5b6cf06"
+  },
+  "a4609840-e288-455a-ab98-124ae8f1cd4a": {
+    "filename": "rag_guide.txt",
+    "chunk_count": 3,
+    "doc_id": "a4609840-e288-455a-ab98-124ae8f1cd4a"
+  },
+  "d7122fda-5b26-4005-86d5-6fe86905f9e0": {
+    "filename": "rag_guide.txt",
+    "chunk_count": 3,
+    "doc_id": "d7122fda-5b26-4005-86d5-6fe86905f9e0"
+  },
+  "2883d4f4-6305-4784-9c99-a4a326c3ecb3": {
+    "filename": "test_rag.txt",
+    "chunk_count": 1,
+    "doc_id": "2883d4f4-6305-4784-9c99-a4a326c3ecb3"
+  },
+  "5e973632-042f-4e0b-925b-f94d37c91905": {
+    "filename": "ml_guide.txt",
+    "chunk_count": 4,
+    "doc_id": "5e973632-042f-4e0b-925b-f94d37c91905"
+  },
+  "f0425d39-ebbd-4037-81ba-e35c6d92e5e5": {
+    "filename": "\u7279\u6717\u666e\u5173\u7a0e\u653f\u7b56\u7684\u7406\u5ff5\u548c\u7f8e\u56fd\u7684\u53d8\u9769.pdf",
+    "chunk_count": 44,
+    "doc_id": "f0425d39-ebbd-4037-81ba-e35c6d92e5e5"
+  },
+  "8aaea0f6-12e6-4ca9-9bad-e3459d83ed9e": {
+    "filename": "AI Engineering (Chip Huyen) (Z-Library).pdf",
+    "chunk_count": 1472,
+    "doc_id": "8aaea0f6-12e6-4ca9-9bad-e3459d83ed9e"
+  },
+  "2124ee93-744f-49d0-ad06-f164e3c73f0e": {
+    "filename": "formatting_test.txt",
+    "chunk_count": 1,
+    "doc_id": "2124ee93-744f-49d0-ad06-f164e3c73f0e"
+  },
+  "23fde91d-74cd-4d6f-a5e4-79022d48763d": {
+    "filename": "formatting_test.txt",
+    "chunk_count": 1,
+    "doc_id": "23fde91d-74cd-4d6f-a5e4-79022d48763d"
+  }
+}

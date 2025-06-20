@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+    volumes:
+      - ./backend:/app
+      - vector_data:/app/vector_data
+    depends_on:
+      - embedding-service
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  embedding-service:
+    image: huggingface/transformers-pytorch-gpu:4.21.0
+    command: >
+      python -c "
+      from sentence_transformers import SentenceTransformer;
+      model = SentenceTransformer('BAAI/bge-m3');
+      print('BGE-M3 model loaded successfully')
+      "
+    volumes:
+      - model_cache:/root/.cache
+
+volumes:
+  vector_data:
+  model_cache:

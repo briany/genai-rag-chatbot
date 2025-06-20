@@ -1,0 +1,18 @@
+This is a test document for the GenAI RAG Chatbot.
+
+It contains some sample information about artificial intelligence and machine learning.
+
+RAG (Retrieval-Augmented Generation) is a technique that combines information retrieval with text generation. It allows language models to access and use external knowledge when generating responses.
+
+Key benefits of RAG include:
+- Improved accuracy by grounding responses in factual information
+- Up-to-date information without retraining the model
+- Transparency through source attribution
+- Reduced hallucinations
+
+The system works by:
+1. Splitting documents into chunks
+2. Creating embeddings for each chunk
+3. Storing embeddings in a vector database
+4. Retrieving relevant chunks for user queries
+5. Using retrieved context to generate informed responses
