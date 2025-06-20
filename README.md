@@ -49,20 +49,41 @@ Edit `backend/.env` and add your OpenRouter API key:
 OPENROUTER_API_KEY=your_openrouter_api_key_here
 ```
 
-### 2. Option A: Local Development
+### 2. Development Commands
 
-**Backend Setup:**
+**Quick Start (Recommended):**
 ```bash
-cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# Start both backend and frontend servers
+./dev.sh
+
+# Or specify individual commands
+./dev.sh install   # Install all dependencies
+./dev.sh backend   # Start backend only
+./dev.sh frontend  # Start frontend only
+./dev.sh help      # Show all options
 ```
 
-**Frontend Setup:**
+**Manual Commands:**
+
+**Start Backend Server:**
+```bash
+cd backend
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Start Frontend Server:**
 ```bash
 cd frontend
-npm install
 npm start
+```
+
+**Install Dependencies:**
+```bash
+# Backend dependencies
+cd backend && pip install -r requirements.txt
+
+# Frontend dependencies  
+cd frontend && npm install
 ```
 
 ### 3. Option B: Docker Deployment
