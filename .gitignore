@@ -22,12 +22,31 @@ wheels/
 
 # Environment variables
 .env
+.env.local
+.env.development
+.env.test
+.env.production
+*.env
 .venv
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Secrets and sensitive files
+secrets/
+*.key
+*.pem
+*.p12
+*.pfx
+config.json
+credentials.json
+
+# Vector store files (may contain processed data)
+*.faiss
+*_metadata.json
+documents_metadata.json
 
 # IDEs
 .vscode/settings.json
@@ -87,3 +106,20 @@ temp/
 
 # Docker
 .dockerignore
+
+# Additional security patterns
+**/secret*
+**/private*
+**/*password*
+**/*credential*
+**/api_key*
+temp_*
+*.tmp
+*.bak
+*.backup
+
+# User data and uploads
+uploads/
+user_data/
+documents/
+files/
