@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './DocumentList.css';
 
 interface Document {
-  document_id: string;
-  document_name: string;
+  doc_id: string;
+  filename: string;
   chunk_count: number;
 }
 
 interface DocumentListProps {
   refreshTrigger: number;
   onDocumentDeleted: () => void;
+}
 }
 
 const DocumentList: React.FC<DocumentListProps> = ({ refreshTrigger, onDocumentDeleted }) => {
@@ -88,10 +89,10 @@ const DocumentList: React.FC<DocumentListProps> = ({ refreshTrigger, onDocumentD
         ) : (
           <div className="documents">
             {documents.map((doc) => (
-              <div key={doc.document_id} className="document-item">
+              <div key={doc.doc_id} className="document-item">
                 <div className="document-info">
-                  <div className="document-name" title={doc.document_name}>
-                    📄 {doc.document_name}
+                  <div className="document-name" title={doc.filename}>
+                    📄 {doc.filename}
                   </div>
                   <div className="document-stats">
                     📊 {doc.chunk_count} chunk{doc.chunk_count !== 1 ? 's' : ''}
@@ -99,11 +100,11 @@ const DocumentList: React.FC<DocumentListProps> = ({ refreshTrigger, onDocumentD
                 </div>
                 <button
                   className="delete-button"
-                  onClick={() => handleDelete(doc.document_id)}
-                  disabled={deleting === doc.document_id}
+                  onClick={() => handleDelete(doc.doc_id)}
+                  disabled={deleting === doc.doc_id}
                   title="Delete document"
                 >
-                  {deleting === doc.document_id ? '⏳' : '🗑️'}
+                  {deleting === doc.doc_id ? '⏳' : '🗑️'}
                 </button>
               </div>
             ))}
