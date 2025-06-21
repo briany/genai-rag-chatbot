@@ -1,7 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import './ChatInterface.css';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+import { ScrollArea } from './ui/scroll-area';
+import { Send, MessageCircle, Loader2, BookOpen, User, Bot } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 interface Message {
   id: string;
@@ -97,95 +103,142 @@ const ChatInterface: React.FC = () => {
   };
 
   return (
-    <div className="chat-interface">
-      <div className="chat-header">
-        <h2>Ask Questions</h2>
-        <p>Ask questions about your uploaded documents</p>
-      </div>
+    <Card className="h-full flex flex-col">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <MessageCircle className="h-5 w-5" />
+          Ask Questions
+        </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Ask questions about your uploaded documents
+        </p>
+      </CardHeader>
       
-      <div className="chat-messages">
-        {messages.length === 0 ? (
-          <div className="empty-chat">
-            <p>👋 Hello! Upload some documents and ask me questions about their content.</p>
-            <div className="example-questions">
-              <p>Example questions:</p>
-              <ul>
-                <li>"What is the main topic of the uploaded document?"</li>
-                <li>"Can you summarize the key points?"</li>
-                <li>"What does the document say about [specific topic]?"</li>
-              </ul>
-            </div>
-          </div>
-        ) : (
-          messages.map((message) => (
-            <div key={message.id} className={`message ${message.sender}`}>
-              <div className="message-content">
-                <div className="message-text">
-                  {message.sender === 'bot' ? (
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {message.text}
-                    </ReactMarkdown>
-                  ) : (
-                    message.text
-                  )}
+      <CardContent className="flex-1 flex flex-col p-0">
+        <ScrollArea className="flex-1 px-6">
+          {messages.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full py-12 text-center">
+              <BookOpen className="h-16 w-16 text-muted-foreground mb-4" />
+              <h3 className="text-lg font-medium mb-2">Welcome!</h3>
+              <p className="text-muted-foreground mb-6 max-w-md">
+                Upload some documents and ask me questions about their content.
+              </p>
+              <div className="space-y-2 text-left max-w-lg">
+                <p className="text-sm font-medium text-muted-foreground">Example questions:</p>
+                <div className="space-y-1 text-sm text-muted-foreground">
+                  <p>• "What is the main topic of the uploaded document?"</p>
+                  <p>• "Can you summarize the key points?"</p>
+                  <p>• "What does the document say about [specific topic]?"</p>
                 </div>
-                {message.sources && message.sources.length > 0 && (
-                  <div className="message-sources">
-                    <h4>Sources:</h4>
-                    {message.sources.map((source, index) => (
-                      <div key={index} className="source-item">
-                        <div className="source-document">{source.document_name}</div>
-                        <div className="source-text">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {source.chunk_text.length > 200 
-                              ? `${source.chunk_text.substring(0, 200)}...` 
-                              : source.chunk_text}
-                          </ReactMarkdown>
-                        </div>
-                        <div className="source-score">Relevance: {(1 - source.score).toFixed(2)}</div>
-                      </div>
-                    ))}
+              </div>
+            </div>
+          ) : (
+            <div className="py-4 space-y-4">
+              {messages.map((message) => (
+                <div key={message.id} className="flex gap-3">
+                  <div className={cn(
+                    "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center",
+                    message.sender === 'user' 
+                      ? "bg-primary text-primary-foreground" 
+                      : "bg-secondary text-secondary-foreground"
+                  )}>
+                    {message.sender === 'user' ? (
+                      <User className="h-4 w-4" />
+                    ) : (
+                      <Bot className="h-4 w-4" />
+                    )}
                   </div>
-                )}
-              </div>
-              <div className="message-timestamp">
-                {message.timestamp.toLocaleTimeString()}
-              </div>
+                  
+                  <div className="flex-1 space-y-2">
+                    <div className={cn(
+                      "rounded-lg p-3 max-w-[80%]",
+                      message.sender === 'user'
+                        ? "bg-primary text-primary-foreground ml-auto"
+                        : "bg-muted"
+                    )}>
+                      {message.sender === 'bot' ? (
+                      <div className="prose prose-sm dark:prose-invert max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                          {message.text}
+                        </ReactMarkdown>
+                      </div>
+                      ) : (
+                        <p className="text-sm">{message.text}</p>
+                      )}
+                    </div>
+                    
+                    {message.sources && message.sources.length > 0 && (
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-medium text-muted-foreground">Sources:</h4>
+                        <div className="space-y-2">
+                          {message.sources.map((source, index) => (
+                            <div key={index} className="bg-muted/50 rounded-lg p-3 text-sm">
+                              <div className="flex items-center justify-between mb-2">
+                                <Badge variant="outline">{source.document_name}</Badge>
+                                <span className="text-xs text-muted-foreground">
+                                  Relevance: {(1 - source.score).toFixed(2)}
+                                </span>
+                              </div>
+                              <div className="prose prose-xs dark:prose-invert max-w-none text-muted-foreground">
+                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                  {source.chunk_text.length > 200 
+                                    ? `${source.chunk_text.substring(0, 200)}...` 
+                                    : source.chunk_text}
+                                </ReactMarkdown>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    <p className="text-xs text-muted-foreground">
+                      {message.timestamp.toLocaleTimeString()}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              
+              {loading && (
+                <div className="flex gap-3">
+                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center">
+                    <Bot className="h-4 w-4" />
+                  </div>
+                  <div className="bg-muted rounded-lg p-3">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <span className="text-sm text-muted-foreground">Thinking...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              <div ref={messagesEndRef} />
             </div>
-          ))
-        )}
-        {loading && (
-          <div className="message bot loading-message">
-            <div className="message-content">
-              <div className="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
+          )}
+        </ScrollArea>
+        
+        <div className="border-t bg-background p-4">
+          <div className="flex gap-2">
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              placeholder="Ask a question about your documents..."
+              disabled={loading}
+              className="flex-1"
+            />
+            <Button 
+              onClick={handleSendMessage} 
+              disabled={!input.trim() || loading}
+              size="icon"
+            >
+              <Send className="h-4 w-4" />
+            </Button>
           </div>
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-      
-      <div className="chat-input">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Ask a question about your documents..."
-          disabled={loading}
-        />
-        <button 
-          onClick={handleSendMessage} 
-          disabled={!input.trim() || loading}
-          className="send-button"
-        >
-          Send
-        </button>
-      </div>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
