@@ -91,10 +91,10 @@ const DocumentList: React.FC<DocumentListProps> = ({ refreshTrigger, onDocumentD
               <div key={doc.document_id} className="document-item">
                 <div className="document-info">
                   <div className="document-name" title={doc.document_name}>
-                    {doc.document_name}
+                    📄 {doc.document_name}
                   </div>
                   <div className="document-stats">
-                    {doc.chunk_count} chunks
+                    📊 {doc.chunk_count} chunk{doc.chunk_count !== 1 ? 's' : ''}
                   </div>
                 </div>
                 <button
