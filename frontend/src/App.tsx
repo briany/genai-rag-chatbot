@@ -24,12 +24,15 @@ function App() {
       </header>
       
       <main className="App-main">
-        <div className="upload-section">
-          <DocumentUpload onDocumentUploaded={handleDocumentUploaded} />
+        <div className="documents-pane">
           <DocumentList 
             refreshTrigger={refreshDocuments}
             onDocumentDeleted={handleDocumentDeleted}
           />
+        </div>
+        
+        <div className="upload-section">
+          <DocumentUpload onDocumentUploaded={handleDocumentUploaded} />
         </div>
         
         <div className="chat-section">

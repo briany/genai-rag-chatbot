@@ -66,42 +66,50 @@ const DocumentList: React.FC<DocumentListProps> = ({ refreshTrigger, onDocumentD
   if (loading) {
     return (
       <div className="document-list">
-        <h2>Knowledge Base</h2>
-        <div className="loading">Loading documents...</div>
+        <h2>📚 Knowledge Base</h2>
+        <div className="document-list-content">
+          <div className="loading">Loading documents...</div>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="document-list">
-      <h2>Knowledge Base</h2>
-      {documents.length === 0 ? (
-        <div className="empty-state">
-          <p>No documents uploaded yet.</p>
-          <p>Upload some documents to start asking questions!</p>
-        </div>
-      ) : (
-        <div className="documents">
-          {documents.map((doc) => (
-            <div key={doc.document_id} className="document-item">
-              <div className="document-info">
-                <div className="document-name">{doc.document_name}</div>
-                <div className="document-stats">
-                  {doc.chunk_count} chunks
-                </div>
-              </div>
-              <button
-                className="delete-button"
-                onClick={() => handleDelete(doc.document_id)}
-                disabled={deleting === doc.document_id}
-                title="Delete document"
-              >
-                {deleting === doc.document_id ? '...' : '🗑️'}
-              </button>
+      <h2>📚 Knowledge Base</h2>
+      <div className="document-list-content">
+        {documents.length === 0 ? (
+          <div className="empty-state">
+            <p>No documents uploaded yet.</p>
+            <div className="upload-hint">
+              💡 Upload some documents to start asking questions about their content!
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        ) : (
+          <div className="documents">
+            {documents.map((doc) => (
+              <div key={doc.document_id} className="document-item">
+                <div className="document-info">
+                  <div className="document-name" title={doc.document_name}>
+                    {doc.document_name}
+                  </div>
+                  <div className="document-stats">
+                    {doc.chunk_count} chunks
+                  </div>
+                </div>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDelete(doc.document_id)}
+                  disabled={deleting === doc.document_id}
+                  title="Delete document"
+                >
+                  {deleting === doc.document_id ? '⏳' : '🗑️'}
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -24,29 +24,66 @@
 .App-main {
   flex: 1;
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 350px 1fr 2fr;
+  grid-template-areas: "documents upload chat";
   gap: 20px;
   padding: 20px;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   width: 100%;
+  height: calc(100vh - 120px);
+}
+
+.documents-pane {
+  grid-area: documents;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
 .upload-section {
+  grid-area: upload;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 .chat-section {
+  grid-area: chat;
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+  .App-main {
+    grid-template-columns: 1fr 2fr;
+    grid-template-areas: 
+      "documents documents"
+      "upload chat";
+    height: auto;
+  }
+  
+  .documents-pane {
+    max-height: 300px;
+  }
 }
 
 @media (max-width: 768px) {
   .App-main {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "documents"
+      "upload" 
+      "chat";
     gap: 20px;
+    height: auto;
+  }
+  
+  .documents-pane {
+    max-height: 250px;
   }
   
   .App-header h1 {
