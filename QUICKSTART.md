@@ -19,7 +19,7 @@ OPENROUTER_API_KEY=your_actual_api_key_here
 
 ```bash
 cd backend
-python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8001
 ```
 
 ### 3. Start the Frontend
@@ -33,7 +33,8 @@ npm start
 ### 4. Open the Application
 
 - Frontend: http://localhost:3000
-- Backend API: http://localhost:8000/docs (FastAPI documentation)
+- Backend API: http://localhost:8001
+- API Documentation: http://localhost:8001/docs (FastAPI documentation)
 
 ## 📋 What You Can Do
 
@@ -46,7 +47,7 @@ npm start
 
 - **Backend won't start**: Make sure you have set the OpenRouter API key in `backend/.env`
 - **Frontend won't start**: Run `npm install` in the frontend directory
-- **Upload errors**: Ensure the backend is running on port 8000
+- **Upload errors**: Ensure the backend is running on port 8001
 - **No AI responses**: Check that your OpenRouter API key is valid
 
 ## 🐳 Docker Alternative

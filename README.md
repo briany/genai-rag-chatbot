@@ -8,7 +8,7 @@ A GenAI-enabled, RAG-based chatbot that allows users to upload documents and ask
 - 🔍 **Vector Search**: FAISS-powered semantic search with BGE-M3 embeddings
 - 🤖 **AI Responses**: Context-aware answers using OpenRouter API (qwen/qwen-2.5-14b-instruct)
 - 📚 **Source Attribution**: Transparent source references for all answers
-- 🎨 **Modern UI**: React-based interface with drag-and-drop upload
+- 🎨 **Modern UI**: React-based interface with TailwindCSS and shadcn/ui components
 - 🐳 **Docker Ready**: Containerized for easy local deployment
 
 ## Architecture
@@ -68,7 +68,7 @@ OPENROUTER_API_KEY=your_openrouter_api_key_here
 **Start Backend Server:**
 ```bash
 cd backend
-python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8001
 ```
 
 **Start Frontend Server:**
@@ -100,7 +100,8 @@ docker-compose up --build
 
 1. **Access the Application**
    - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
+   - Backend API: http://localhost:8001
+   - API Documentation: http://localhost:8001/docs
 
 2. **Upload Documents**
    - Drag and drop files or click to browse
@@ -148,16 +149,19 @@ docker-compose up --build
 ## Technical Details
 
 ### Document Processing
+
 - **Chunking Strategy**: Sliding window with 1000 character chunks and 200 character overlap
 - **Boundary Detection**: Attempts to end chunks at sentence or paragraph boundaries
 - **Metadata Tracking**: Preserves source document and chunk position information
 
 ### Vector Storage
+
 - **Embedding Model**: BGE-M3 (1024-dimensional embeddings)
 - **Vector Database**: FAISS with L2 distance for similarity search
 - **Persistence**: Index and metadata saved to disk for persistence across restarts
 
 ### LLM Integration
+
 - **Model**: qwen/qwen-2.5-14b-instruct:free via OpenRouter
 - **Context Window**: Up to 5 most relevant document chunks per query
 - **Temperature**: 0.7 for balanced creativity and accuracy
@@ -178,10 +182,15 @@ agent four/
 ├── frontend/
 │   ├── src/
 │   │   ├── App.tsx         # Main React component
+│   │   ├── index.css       # Tailwind CSS imports
 │   │   └── components/
 │   │       ├── ChatInterface.tsx    # Chat UI
 │   │       ├── DocumentUpload.tsx   # File upload
 │   │       └── DocumentList.tsx     # Document management
+│   │       └── ui/                  # UI components (shadcn/ui)
+│   ├── tailwind.config.js  # Tailwind configuration
+│   ├── postcss.config.js   # PostCSS configuration
+│   ├── craco.config.js     # CRACO configuration
 │   └── package.json        # Node.js dependencies
 ├── docker-compose.yml      # Multi-container deployment
 └── README.md              # This file
@@ -193,11 +202,12 @@ agent four/
 - ✅ Sub-3 second average response latency
 - ✅ Clear RAG traceability with source attribution
 - ✅ Support for PDF, DOCX, and TXT documents
-- ✅ Modern, responsive web interface
+- ✅ Modern, responsive web interface with Tailwind CSS
 
 ## Development
 
 ### Running Tests
+
 ```bash
 # Backend tests
 cd backend
@@ -209,6 +219,7 @@ npm test
 ```
 
 ### Code Quality
+
 - Backend: Uses FastAPI with Pydantic for type safety
 - Frontend: TypeScript with ESLint for code quality
 - Error handling: Comprehensive error states and user feedback
@@ -218,11 +229,12 @@ npm test
 ### Common Issues
 
 1. **Backend won't start**: Check if OpenRouter API key is set in `.env`
-2. **Upload fails**: Ensure backend is running on port 8000
+2. **Upload fails**: Ensure backend is running on port 8001
 3. **No responses**: Verify OpenRouter API key is valid and has credits
-4. **Docker issues**: Make sure ports 3000 and 8000 are available
+4. **Docker issues**: Make sure ports 3000 and 8001 are available
 
 ### Logs
+
 - Backend logs: Check FastAPI server output
 - Frontend logs: Open browser developer console
 - Docker logs: `docker-compose logs [service_name]`
@@ -242,6 +254,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Roadmap
 
 Future enhancements could include:
+
 - User authentication and multi-tenancy
 - Support for additional document formats
 - Advanced chunking strategies
