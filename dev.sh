@@ -43,7 +43,7 @@ install_deps() {
 start_backend() {
     echo -e "${BLUE}🚀 Starting backend server...${NC}"
     cd backend
-    python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    python -m uvicorn main:app --reload --host 0.0.0.0 --port 8001
 }
 
 start_frontend() {
@@ -54,14 +54,14 @@ start_frontend() {
 
 start_both() {
     echo -e "${BLUE}🚀 Starting both servers...${NC}"
-    echo -e "${YELLOW}Backend will run on: http://localhost:8000${NC}"
+    echo -e "${YELLOW}Backend will run on: http://localhost:8001${NC}"
     echo -e "${YELLOW}Frontend will run on: http://localhost:3000${NC}"
     echo
     echo -e "${YELLOW}Press Ctrl+C to stop both servers${NC}"
     echo
     
     # Start backend in background
-    cd backend && python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 &
+    cd backend && python -m uvicorn main:app --reload --host 0.0.0.0 --port 8001 &
     BACKEND_PID=$!
     cd ..
     

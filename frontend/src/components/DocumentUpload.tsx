@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
-import { Upload, FileText, Loader2 } from 'lucide-react';
+import { FileText, Loader2 } from 'lucide-react';
 import { cn } from '../lib/utils';
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8001';
 
 interface DocumentUploadProps {
   onDocumentUploaded: () => void;
@@ -15,6 +16,25 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ onDocumentUploaded }) =
   const handleFileUpload = async (files: FileList) => {
     if (files.length === 0) return;
 
+    // Validate files
+    const allowedTypes = ['.pdf', '.docx', '.txt'];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+      
+      if (!allowedTypes.includes(fileExtension)) {
+        alert(`File type ${fileExtension} is not supported. Please upload PDF, DOCX, or TXT files.`);
+        return;
+      }
+      
+      if (file.size > maxSize) {
+        alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+        return;
+      }
+    }
+
     setUploading(true);
     const formData = new FormData();
     
@@ -23,7 +43,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ onDocumentUploaded }) =
     }
 
     try {
-      const response = await fetch('http://localhost:8000/upload', {
+      const response = await fetch(`${API_BASE_URL}/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -36,8 +56,10 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ onDocumentUploaded }) =
         const fileInput = document.getElementById('file-input') as HTMLInputElement;
         if (fileInput) fileInput.value = '';
       } else {
-        console.error('Upload failed:', response.statusText);
-        alert('Upload failed. Please try again.');
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.detail || `Upload failed: ${response.status} ${response.statusText}`;
+        console.error('Upload failed:', errorMessage);
+        alert(errorMessage);
       }
     } catch (error) {
       console.error('Upload error:', error);
@@ -73,59 +95,58 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ onDocumentUploaded }) =
   };
 
   return (
-    <Card className="h-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Upload className="h-5 w-5" />
-          Upload Documents
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div 
-          className={cn(
-            "border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer",
-            dragOver ? "border-primary bg-primary/5" : "border-muted-foreground/25",
-            uploading && "pointer-events-none opacity-50"
-          )}
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onClick={() => document.getElementById('file-input')?.click()}
-        >
-          {uploading ? (
-            <div className="flex flex-col items-center gap-3">
-              <Loader2 className="h-12 w-12 animate-spin text-primary" />
-              <p className="text-sm text-muted-foreground">
-                Uploading and processing documents...
+    <div>
+      <div 
+        className={cn(
+          "border-2 border-dashed rounded-lg p-8 text-center transition-all duration-200 cursor-pointer",
+          dragOver 
+            ? "border-blue-400 bg-blue-50" 
+            : "border-gray-300 hover:border-gray-400",
+          uploading && "pointer-events-none opacity-50"
+        )}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onClick={() => document.getElementById('file-input')?.click()}
+      >
+        {uploading ? (
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+            <p className="text-sm text-gray-600">
+              Uploading and processing documents...
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-4">
+            <FileText className="h-12 w-12 text-gray-400" />
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-gray-900">
+                Drag and drop files here, or click to browse
+              </p>
+              <p className="text-xs text-gray-500">
+                Supported formats: PDF, DOCX, TXT (Max size: 10MB each)
               </p>
             </div>
-          ) : (
-            <div className="flex flex-col items-center gap-4">
-              <FileText className="h-12 w-12 text-muted-foreground" />
-              <div className="space-y-2">
-                <p className="text-sm font-medium">
-                  Drag and drop files here, or click to browse
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Supported formats: PDF, DOCX, TXT
-                </p>
-              </div>
-              <Button variant="outline" size="sm" disabled={uploading}>
-                Choose Files
-              </Button>
-            </div>
-          )}
-          <input
-            id="file-input"
-            type="file"
-            multiple
-            accept=".pdf,.docx,.txt"
-            onChange={handleFileChange}
-            className="hidden"
-          />
-        </div>
-      </CardContent>
-    </Card>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              disabled={uploading}
+              className="mt-2"
+            >
+              Choose Files
+            </Button>
+          </div>
+        )}
+        <input
+          id="file-input"
+          type="file"
+          multiple
+          accept=".pdf,.docx,.txt"
+          onChange={handleFileChange}
+          className="hidden"
+        />
+      </div>
+    </div>
   );
 };
 
